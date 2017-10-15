@@ -5,12 +5,16 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class CarGame extends JFrame
 {
     private final int WIDTH = 900, HEIGHT = 650;
+
     // new Rectangle(x, y, width, hight)
     Rectangle left = new Rectangle(0, 0, WIDTH / 9, HEIGHT);
 
@@ -66,6 +70,46 @@ public class CarGame extends JFrame
 
     int car2Direction = UP;
 
+    //============================================================
+    //赛车图片资源
+    private static BufferedImage car1UpImage;
+
+    private static BufferedImage car1DownImage;
+
+    private static BufferedImage car1LeftImage;
+
+    private static BufferedImage car1rightImage;
+
+    private static BufferedImage car2UpImage;
+
+    private static BufferedImage car2DownImage;
+
+    private static BufferedImage car2LeftImage;
+
+    private static BufferedImage car2RightImage;
+
+    static
+    {
+        try
+        {
+            //读取图片资源
+            car1UpImage = ImageIO.read(CarGame.class.getResource("01car/car1up.png"));
+            car1DownImage = ImageIO.read(CarGame.class.getResource("01car/car1down.png"));
+            car1LeftImage = ImageIO.read(CarGame.class.getResource("01car/car1left.png"));
+            car1rightImage = ImageIO.read(CarGame.class.getResource("01car/car1right.png"));
+
+            car2UpImage = ImageIO.read(CarGame.class.getResource("01car/car2up.png"));
+            car2DownImage = ImageIO.read(CarGame.class.getResource("01car/car2down.png"));
+            car2LeftImage = ImageIO.read(CarGame.class.getResource("01car/car2left.png"));
+            car2RightImage = ImageIO.read(CarGame.class.getResource("01car/car2right.png"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    //============================================================
     //构造方法
     public CarGame()
     {
@@ -114,14 +158,48 @@ public class CarGame extends JFrame
         g.setColor(Color.YELLOW);
         // 绘制终点线
         g.fillRect(finishLine.x, finishLine.y, finishLine.width, finishLine.height);
-        //设 置 赛 车 1 为蓝色
-        g.setColor(Color.BLUE);
-        //绘 制 赛 车 1
-        g.fill3DRect(car1.x, car1.y, car1.width, car1.height, true);
-        //设 置 赛 车 2 为红色
-        g.setColor(Color.RED);
-        //绘 制 赛 车 2
-        g.fill3DRect(car2.x, car2.y, car2.width, car2.height, true);
+
+        drawCarImage(g);
+    }
+
+    /**
+     * @param g 根据不同方向 使用图片 绘制赛车
+     */
+    private void drawCarImage(Graphics g)
+    {
+        if (car1Direction == UP)
+        {
+            g.drawImage(car1UpImage, car1.x, car1.y, this);
+        }
+        if (car1Direction == DOWN)
+        {
+            g.drawImage(car1DownImage, car1.x, car1.y, this);
+        }
+        if (car1Direction == LEFT)
+        {
+            g.drawImage(car1LeftImage, car1.x, car1.y, this);
+        }
+        if (car1Direction == RIGHT)
+        {
+            g.drawImage(car1rightImage, car1.x, car1.y, this);
+        }
+
+        if (car2Direction == UP)
+        {
+            g.drawImage(car2UpImage, car2.x, car2.y, this);
+        }
+        if (car2Direction == DOWN)
+        {
+            g.drawImage(car2DownImage, car2.x, car2.y, this);
+        }
+        if (car2Direction == LEFT)
+        {
+            g.drawImage(car2LeftImage, car2.x, car2.y, this);
+        }
+        if (car2Direction == RIGHT)
+        {
+            g.drawImage(car2RightImage, car2.x, car2.y, this);
+        }
     }
 
     // 回执跑道
@@ -179,7 +257,7 @@ public class CarGame extends JFrame
                         car1.x += (int) car1Speed;
                     }
                     // 设 置 每 次 加 速 的 间 隔 时 间,线程每过75ms执行一次此循环
-                    Thread.sleep(75);
+                    Thread.sleep(30);
                 }
                 catch (Exception e)
                 {
@@ -244,7 +322,7 @@ public class CarGame extends JFrame
                     }
                     car2.y -= car2Speed;
                     // 设 置 每 次 加 速 的 间 隔 时 间
-                    Thread.sleep(75);
+                    Thread.sleep(30);
                 }
                 catch (Exception e)
                 {
